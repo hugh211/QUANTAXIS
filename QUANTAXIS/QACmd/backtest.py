@@ -46,6 +46,8 @@ QB.strategy_stock_list 回测初始化的时候  输入的一个回测标的
 QB.strategy_start_date 回测的开始时间
 QB.strategy_end_date  回测的结束时间
 
+QB.setting.QA_setting_user_name = str('admin') #回测账户
+QB.setting.QA_setting_user_password = str('admin') #回测密码
 
 QB.today  在策略里面代表策略执行时的日期
 QB.now  在策略里面代表策略执行时的时间
@@ -53,7 +55,7 @@ QB.benchmark_code  策略业绩评价的对照行情
 QB.benchmark_type  对照行情是股票还是指数
 
 
-
+QB.backtest_print_log = True  # 是否在屏幕上输出结果
 
 函数:
 获取市场(基于gap)行情:
@@ -83,10 +85,12 @@ order有三种方式:
     及 买入按bar的最高价成交 卖出按bar的最低价成交
 3.收盘价成交模式 order['bid_model']=3或者c,C
 
-查询当前一只股票的持仓量
+#查询当前一只股票的持仓量
 QB.QA_backtest_hold_amount(QB,code)
-
-
+#查询当前一只股票的可卖数量
+QB.QA_backtest_sell_available(QB,code)
+#查询当前一只股票的持仓平均成本
+QB.QA_backtest_hold_price(QB,code)
 """
 
 
@@ -100,10 +104,12 @@ def init():
     QB.strategy_name = 'test_daily'
     # 数据库位置
     QB.setting.QA_util_sql_mongo_ip = '127.0.0.1'  # 回测数据库
+    QB.setting.QA_setting_user_name = str('admin') #回测账户
+    QB.setting.QA_setting_user_password = str('admin') #回测密码
 
     QB.account.init_assest = 2500000  # 初始资金
-    
-    # benchmark 
+
+    # benchmark
     QB.benchmark_code = '399300'
     # benchmark 可以是个股，也可以是指数
     QB.benchmark_type = 'index'
@@ -115,32 +121,36 @@ def init():
                               '600010', '601801']  # 回测的股票列表/如果是指数回测 就是指数列表
     QB.strategy_start_date = '2016-07-01 10:30:00'  # 回测开始日期
     QB.strategy_end_date = '2017-07-10'    # 回测结束日期
-
+    QB.backtest_print_log = True  # 是否在屏幕上输出结果
 
 
 @QB.before_backtest
 def before_backtest():
     global risk_position
-    # QA.QA_util_log_info(QB.benchmark_data)
 
 
 @QB.load_strategy
 def strategy():
-
+    global risk_position  # 在这个地方global变量 可以拿到before_backtest里面的东西
     QA.QA_util_log_info(QB.account.sell_available)
     QA.QA_util_log_info('LEFT Cash: %s' % QB.account.cash_available)
     for item in QB.strategy_stock_list:
-        QA.QA_util_log_info(QB.QA_backtest_get_market_data(QB,item,QB.today).data)
-        if QB.QA_backtest_hold_amount(QB, item) == 0:
+        QA.QA_util_log_info(
+            QB.QA_backtest_get_market_data(QB, item, QB.today).data)  # 如果是分钟回测 用QB.now
+
+        if QB.QA_backtest_hold_amount(QB, item) == 0:  # 如果不持仓
             QB.QA_backtest_send_order(
                 QB, item, 10000, 1, {'bid_model': 'Market'})
-
-        else:
-            # print(QB.QA_backtest_hold_amount(QB,item))
+        elif QB.QA_backtest_sell_available(QB, item) > 0:  #如果可卖数量大于0
             QB.QA_backtest_send_order(
                 QB, item, 10000, -1, {'bid_model': 'Market'})
-
-
+                
+# #查询当前一只股票的持仓量
+# QB.QA_backtest_hold_amount(QB,code)
+# #查询当前一只股票的可卖数量
+# QB.QA_backtest_sell_available(QB,code)
+# #查询当前一只股票的持仓平均成本
+# QB.QA_backtest_hold_price(QB,code)
 @QB.end_backtest
 def after_backtest():
     pass

@@ -30,7 +30,7 @@ import pandas as pd
 
 from bson.objectid import ObjectId
 from pandas import DataFrame
-from QUANTAXIS.QAUtil import (QA_Setting, QA_util_date_stamp,
+from QUANTAXIS.QAUtil import (QA_Setting, QA_util_date_stamp,trade_date_sse,
                               QA_util_date_valid, QA_util_log_info,
                               QA_util_time_stamp, QA_util_to_json_from_pandas, QA_util_to_list_from_pandas)
 from QUANTAXIS.QAData import QA_data_make_hfq, QA_data_make_qfq
@@ -74,21 +74,14 @@ def QA_fetch_stock_day(code, __start, __end, format_='numpy', collections=QA_Set
         QA_util_log_info('something wrong with date')
 
 
-def QA_fetch_trade_date(collections):
+def QA_fetch_trade_date():
     '获取交易日期'
-    __data = []
-    for item in collections.find_one({}):
-        __data.append(item['date'])
-    return __data
+    return trade_date_sse
 
 
 def QA_fetch_stock_list(collections=QA_Setting.client.quantaxis.stock_list):
     '获取股票列表'
-    __data = []
-    for item in collections.find_one()['stock']['code']:
-        __data.append(item)
-
-    return __data
+    return [item for item in collections.find()]
 
 
 def QA_fetch_stock_full(date_, format_='numpy', collections=QA_Setting.client.quantaxis.stock_day):
@@ -176,7 +169,12 @@ def QA_fetch_indexlist_day(stock_list, date_range, collections=QA_Setting.client
     return __data
 
 
-def QA_fetch_index_min(code, startTime, endTime, format_='numpy', type_='1min', collections=QA_Setting.client.quantaxis.index_min):
+def QA_fetch_index_min(
+        code,
+        startTime, endTime,
+        format_='numpy',
+        type_='1min',
+        collections=QA_Setting.client.quantaxis.index_min):
     '获取股票分钟线'
     if type_ in ['1min', '1m']:
         type_ = '1min'
@@ -287,3 +285,13 @@ def QA_fetch_backtest_info(user=None, account_cookie=None, strategy=None, stock_
 
 def QA_fetch_backtest_history(cookie=None, collections=QA_Setting.client.quantaxis.backtest_history):
     return QA_util_to_json_from_pandas(pd.DataFrame([item for item in collections.find(QA_util_to_json_from_pandas(pd.DataFrame([cookie], index=['cookie']).dropna().T)[0])]).drop(['_id'], axis=1))
+
+
+def QA_fetch_stock_block(code=None,format_='pd', collections=QA_Setting.client.quantaxis.stock_block):
+    if code is not None:
+        data = pd.DataFrame([item for item in collections.find(
+            {'code': code})]).drop(['_id'], axis=1)
+        return data.set_index('code', drop=False)
+    else:
+        data = pd.DataFrame([item for item in collections.find()]).drop(['_id'], axis=1)
+        return data.set_index('code', drop=False)

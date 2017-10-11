@@ -32,7 +32,7 @@ from QUANTAXIS.QAUtil import (QA_util_date_stamp, QA_util_date_str2int,
                               QA_util_get_real_datelist, QA_util_log_info,
                               QA_util_time_stamp, QA_util_web_ping,
                               trade_date_sse)
-
+#from pypinyin import lazy_pinyin
 import tushare as ts
 
 # 基于Pytdx的数据接口,好处是可以在linux/mac上联入通达信行情
@@ -112,7 +112,7 @@ def QA_fetch_get_stock_day(code, start_date, end_date, if_fq='00', level='day', 
                 .drop(['year', 'month', 'day', 'hour',
                        'minute', 'datetime'], axis=1)
 
-            bfq_data['if_trade']=True
+            bfq_data['if_trade'] = True
             data = pd.concat([bfq_data, info[['category']]
                               [bfq_data.index[0]:]], axis=1)
 
@@ -149,7 +149,7 @@ def QA_fetch_get_stock_day(code, start_date, end_date, if_fq='00', level='day', 
                 .drop(['year', 'month', 'day', 'hour',
                        'minute', 'datetime'], axis=1)
 
-            bfq_data['if_trade']=True
+            bfq_data['if_trade'] = True
             data = pd.concat([bfq_data, info[['category']]
                               [bfq_data.index[0]:end_date]], axis=1)
 
@@ -186,7 +186,7 @@ def QA_fetch_get_stock_day(code, start_date, end_date, if_fq='00', level='day', 
                 .drop(['year', 'month', 'day', 'hour',
                        'minute', 'datetime'], axis=1)
 
-            bfq_data['if_trade']=True
+            bfq_data['if_trade'] = True
             data = pd.concat([bfq_data, info[['category']]
                               [bfq_data.index[0]:]], axis=1)
 
@@ -222,7 +222,7 @@ def QA_fetch_get_stock_day(code, start_date, end_date, if_fq='00', level='day', 
                 .drop(['year', 'month', 'day', 'hour',
                        'minute', 'datetime'], axis=1)
 
-            bfq_data['if_trade']=True
+            bfq_data['if_trade'] = True
             data = pd.concat([bfq_data, info[['category']]
                               [bfq_data.index[0]:end_date]], axis=1)
 
@@ -244,7 +244,6 @@ def QA_fetch_get_stock_day(code, start_date, end_date, if_fq='00', level='day', 
             data['preclose'] = data['preclose'] / data['adj']
             data = data[data['if_trade']]
             return data.drop(['fenhong', 'peigu', 'peigujia', 'songzhuangu', 'if_trade', 'category'], axis=1)[data['open'] != 0].assign(date=data['date'].apply(lambda x: str(x)[0:10]))[start_date:end_date]
-
 
 
 def QA_fetch_get_stock_min(code, start, end, level='1min', ip=best_ip, port=7709):
@@ -311,17 +310,26 @@ def QA_fetch_get_stock_list(type_='stock', ip=best_ip, port=7709):
         if type_ in ['stock', 'gp']:
             return pd.concat([data[data['sse'] == 'sz'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 10000 <= 30][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 100000 != 2],
                               data[data['sse'] == 'sh'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 100000 == 6]]).assign(code=data['code'].apply(lambda x: str(x)))
+                #.assign(szm=data['name'].apply(lambda x: ''.join([y[0] for y in lazy_pinyin(x)])))\
+                #.assign(quanpin=data['name'].apply(lambda x: ''.join(lazy_pinyin(x))))
         elif type_ in ['index', 'zs']:
 
             return pd.concat([data[data['sse'] == 'sz'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 1000 >= 399],
-                              data[data['sse'] == 'sh'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 1000 == 0]]).sort_index().assign(code=data['code'].apply(lambda x: str(x)))
-
+                              data[data['sse'] == 'sh'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 1000 == 0]]) \
+                .sort_index()\
+                .assign(code=data['code'].apply(lambda x: str(x)))
+                #.assign(szm=data['name'].apply(lambda x: ''.join([y[0] for y in lazy_pinyin(x)])))\
+                #.assign(quanpin=data['name'].apply(lambda x: ''.join(lazy_pinyin(x))))
         elif type_ in ['etf', 'ETF']:
             return pd.concat([data[data['sse'] == 'sz'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 10000 == 15],
-                              data[data['sse'] == 'sh'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 10000 == 51]]).sort_index().assign(code=data['code'].apply(lambda x: str(x)))
+                              data[data['sse'] == 'sh'][data.assign(code=data['code'].apply(lambda x: int(x)))['code'] // 10000 == 51]]).sort_index().assign(code=data['code'].apply(lambda x: str(x)))\
+                #.assign(szm=data['name'].apply(lambda x: ''.join([y[0] for y in lazy_pinyin(x)])))\
+                #.assign(quanpin=data['name'].apply(lambda x: ''.join(lazy_pinyin(x))))
 
         else:
             return data.assign(code=data['code'].apply(lambda x: str(x)))
+            #.assign(szm=data['name'].apply(lambda x: ''.join([y[0] for y in lazy_pinyin(x)])))\
+            #    .assign(quanpin=data['name'].apply(lambda x: ''.join(lazy_pinyin(x))))
 
 
 def QA_fetch_get_index_day(code, start_date, end_date, level='day', ip=best_ip, port=7709):
@@ -354,6 +362,7 @@ def QA_fetch_get_index_day(code, start_date, end_date, level='day', ip=best_ip, 
 
 
 def QA_fetch_get_index_min(code, start, end, level='1min', ip=best_ip, port=7709):
+    '指数分钟线'
     api = TdxHq_API()
     type_ = ''
     if str(level) in ['5', '5m', '5min', 'five']:
@@ -397,6 +406,7 @@ def __QA_fetch_get_stock_transaction(code, day, retry, api):
 
 
 def QA_fetch_get_stock_transaction(code, start, end, retry=2, ip=best_ip, port=7709):
+    '逐笔成交'
     api = TdxHq_API()
 
     real_start, real_end = QA_util_get_real_datelist(start, end)
@@ -422,6 +432,7 @@ def QA_fetch_get_stock_transaction(code, start, end, retry=2, ip=best_ip, port=7
 
 
 def QA_fetch_get_stock_xdxr(code, ip=best_ip, port=7709):
+    '除权除息'
     api = TdxHq_API()
     market_code = __select_market_code(code)
     with api.connect(ip, port):
@@ -442,8 +453,29 @@ def QA_fetch_get_stock_xdxr(code, ip=best_ip, port=7709):
         return data.assign(date=data['date'].apply(lambda x: str(x)[0:10]))
 
 
-def QA_fetch_get_stock_info():
-    pass
+def QA_fetch_get_stock_block(ip=best_ip, port=7709):
+    '板块数据'
+    api = TdxHq_API()
+    with api.connect(ip, port):
+
+        data = pd.concat([api.to_df(api.get_and_parse_block_info("block_gn.dat")),
+                          api.to_df(api.get_and_parse_block_info("block.dat")),
+                          api.to_df(api.get_and_parse_block_info(
+                              "block_zs.dat")),
+                          api.to_df(api.get_and_parse_block_info("block_fg.dat"))])
+
+        if len(data) > 10:
+            return data.assign(source='tdx').set_index('code', drop=False, inplace=False)
+        else:
+            QA_util_log_info('Wrong with fetch block ')
+
+
+def QA_fetch_get_stock_info(code, ip=best_ip, port=7709):
+    '股票财务数据'
+    api = TdxHq_API()
+    market_code = __select_market_code(code)
+    with api.connect(ip, port):
+        return api.to_df(api.get_finance_info(market_code, code))
 
 
 if __name__ == '__main__':

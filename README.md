@@ -5,17 +5,19 @@
 [![GitHub stars](https://img.shields.io/github/stars/yutiansut/quantaxis.svg?style=social&label=Star&)](https://github.com/yutiansut/quantaxis/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/yutiansut/quantaxis.svg?style=social&label=Fork&)](https://github.com/yutiansut/quantaxis/fork)
 
+[点击右上角Star和Watch来跟踪项目进展! 点击Fork来创建属于你的QUANTAXIS!]
+
 ![main_1](http://osnhakmay.bkt.clouddn.com/Main_1.gif)
 <img src="http://i1.piimg.com/1949/62c510db7915837a.png" width = "27.5%" />
 
 
 
-![version](https://img.shields.io/badge/Version-%200.4.50-orange.svg)
+![version](https://img.shields.io/badge/Version-%200.5.3-orange.svg)
 ![build](https://travis-ci.org/yutiansut/QUANTAXIS.svg?branch=master)
 [![Stories in Ready](https://badge.waffle.io/yutiansut/QUANTAXIS.svg?label=ready&title=Ready)](http://waffle.io/yutiansut/QUANTAXIS)
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/yutiansut/quantaxis)
 ![QAS](https://img.shields.io/badge/QAS-%200.0.8-brown.svg)
-![Pypi](https://img.shields.io/badge/Pypi-%200.4.50-blue.svg)
+![Pypi](https://img.shields.io/badge/Pypi-%200.5.3-blue.svg)
 ![python](https://img.shields.io/badge/python-%203.6/3.5/3.4/win/ubuntu-darkgrey.svg)
 ![Npm](https://img.shields.io/badge/Npm-%200.4.0-yellow.svg)
 ![author](https://img.shields.io/badge/Powered%20by-%20%20yutiansut-red.svg)
@@ -37,12 +39,15 @@ QUANTAXIS量化金融策略框架,是一个面向中小型策略团队的量化�
 - 基于tushare/pytdx/各种爬虫的数据源
 - 实时交易数据
 - 基于Vue.js的前端网站
+- 自定义的数据结构
+- 指标计算
+- 板块数据(0.5.1新增)
 
 预计实现:
 
 - 文档更新
 - 基本面数据
-- 指标数据
+
 <!-- TOC -->
 
 - [QUANTAXIS 量化金融策略框架](#quantaxis-%E9%87%8F%E5%8C%96%E9%87%91%E8%9E%8D%E7%AD%96%E7%95%A5%E6%A1%86%E6%9E%B6)
@@ -52,7 +57,6 @@ QUANTAXIS量化金融策略框架,是一个面向中小型策略团队的量化�
         - [MongoDB](#mongodb)
         - [Nodejs](#nodejs)
         - [python](#python)
-            - [python的一些需要编译的包的安装](#python%E7%9A%84%E4%B8%80%E4%BA%9B%E9%9C%80%E8%A6%81%E7%BC%96%E8%AF%91%E7%9A%84%E5%8C%85%E7%9A%84%E5%AE%89%E8%A3%85)
         - [安装QUANTAXIS](#%E5%AE%89%E8%A3%85quantaxis)
         - [安装QUANATXIS_WebKit](#%E5%AE%89%E8%A3%85quanatxiswebkit)
         - [启动QUANTAXIS CLI 并进行数据的初始化存储](#%E5%90%AF%E5%8A%A8quantaxis-cli-%E5%B9%B6%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AD%98%E5%82%A8)
@@ -62,6 +66,7 @@ QUANTAXIS量化金融策略框架,是一个面向中小型策略团队的量化�
     - [关于QUANTAXIS基金](#%E5%85%B3%E4%BA%8Equantaxis%E5%9F%BA%E9%87%91)
     - [一些基础的api介绍](#%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9A%84api%E4%BB%8B%E7%BB%8D)
         - [QUANTAXIS.QABacktest 的 api](#quantaxisqabacktest-%E7%9A%84-api)
+        - [QUANTAXIS的核心数据结构](#quantaxis%E7%9A%84%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
         - [QUANTAXIS的api](#quantaxis%E7%9A%84api)
     - [回测Webkit插件概览](#%E5%9B%9E%E6%B5%8Bwebkit%E6%8F%92%E4%BB%B6%E6%A6%82%E8%A7%88)
     - [QUANTAXIS 标准化协议和未来协议](#quantaxis-%E6%A0%87%E5%87%86%E5%8C%96%E5%8D%8F%E8%AE%AE%E5%92%8C%E6%9C%AA%E6%9D%A5%E5%8D%8F%E8%AE%AE)
@@ -174,12 +179,15 @@ sudo -H python3.6 get-pip.py
 
 建议直接安装Anaconda包,记住在安装时 选择添加path不然后面会很麻烦
 
-#### python的一些需要编译的包的安装
+> python的一些需要编译的包的安装
 
 安装TA-Lib
+> Ubuntu
 ```
 sudo apt-get update
 sudo apt-get install python3.6-dev
+# 装talib前要先装numpy
+python3.6 -m pip install numpy -i https://pypi.doubanio.com/simple
 wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
 tar -xzvf ta-lib-0.4.0-src.tar.gz
 cd ta-lib
@@ -191,16 +199,20 @@ pip install TA-Lib
 # 安装剩余的依赖项
 python3.6 -m pip install -r requirements.txt -i https://pypi.doubanio.com/simple
 python3.6 -m pip install tushare https://pypi.doubanio.com/simple
-#####
 
-# Windows 下安装一些需要编译的包:
+```
+> Windows
+```
+
 # 访问http://www.lfd.uci.edu/~gohlke/pythonlibs/  下载对应的whl安装包
 # pip install xxxxx(文件名).whl
 ```
 ### 安装QUANTAXIS
 ```
 git clone https://github.com/yutiansut/quantaxis
-cd quantaxis 
+cd quantaxis .
+pip install -r requirements.txt -i https://pypi.doubanio.com/simple
+pip install tushare https://pypi.doubanio.com/simple
 (sudo) pip install -e . # 一定要用这种方法,python setup.py install方法无法解压 安装在本目录下的开发模式
 
 ```
@@ -233,6 +245,8 @@ quantaxis> save all
 
 python  backtest.py
 
+一般而言 日线4个组合的回测(一年)在14-17秒左右 5min级别4个组合的回测(一年)在3-4分钟左右
+
 
 ### 启动QUANTAXIS_Webkit来查看回测的结果
 
@@ -246,7 +260,6 @@ cd backend
 cd ..
 # 再启动前端服务器  在8080端口
 cd web
-(sudo) npm install
 (sudo) npm run dev 或者 forever start build/dev-server.js
 ```
 
@@ -258,6 +271,8 @@ cd web
 ### 更新QUANTAXIS
 
 由于目前项目还在开发中,所以需要使用Git来更新项目:
+
+点击右上角的Star和watch来持续跟踪项目进展~
 
 常规更新:
 ```
@@ -276,7 +291,7 @@ git pull
 
 ## 项目捐赠
 
-写代码不易...写文档最难过...请....作者喝杯咖啡呗?
+写代码不易...写文档最难过...请作者喝杯咖啡呗?
 
 <img src="http://osnhakmay.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20170923132018.jpg" width = "27.5%" />
 
@@ -323,7 +338,11 @@ QB.today  #在策略里面代表策略执行时的日期
 QB.now  #在策略里面代表策略执行时的时间
 QB.benchmark_code  #策略业绩评价的对照行情
 
+QB.backtest_print_log = True  # 是否在屏幕上输出结果
 
+
+QB.setting.QA_setting_user_name = str('admin') #回测账户
+QB.setting.QA_setting_user_password = str('admin') #回测密码
 
 
 #函数:
@@ -358,11 +377,43 @@ order有三种方式:
 """
 #查询当前一只股票的持仓量
 QB.QA_backtest_hold_amount(QB,code)
-
+#查询当前一只股票的可卖数量
+QB.QA_backtest_sell_available(QB,code)
+#查询当前一只股票的持仓平均成本
+QB.QA_backtest_hold_price(QB,code)
 
 ```
+### QUANTAXIS的核心数据结构
+
+QA_DataStruct
 
 
+属性用@property装饰器装饰,进行懒运算 提高效率
+
+DataStruct具有的功能:
+
+- 数据容器
+- 数据变换 [分拆/合并/倒序] split/merge/reverse
+- 数据透视 pivot
+- 数据筛选 select_time/select_time_with_gap/select_code/get_bar
+- 数据复权 to_qfq/to_hfq
+- 数据显示 show
+- 格式变换 to_json/to_pandas/to_list/to_numpy
+- 数据库式查询  query
+- 画图 plot
+- 计算指标 add_func
+
+
+QA_DataStruct_Stock_block
+
+- (属性)该类下的所有板块名称 block_name
+- 查询某一只股票所在的所有板块 get_code(code)
+- 查询某一个板块下的所有股票 get_block(block)
+- 展示当前类下的所有数据 show
+
+
+
+![](http://osnhakmay.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20171004125336.png)
 ### QUANTAXIS的api
 ```python
 
@@ -472,21 +523,22 @@ data=QA.QAFetch.QATdx.QA_fetch_get_stock_realtime(['000001','000002'])
 QA.QA_util_log_info('分笔成交')
 data=QA.QAFetch.QATdx.QA_fetch_get_stock_transaction('000001','2001-01-01','2001-01-15')
 
+QA.QA_util_log_info('板块数据')
+data=QA.QAFetch.QATdx.QA_fetch_get_stock_block()
+
 
 """
 QA.QA_fetch_ 系列 
 从本地数据库获取数据
 """
-
-QA.QA_fetch_stock_day()
-
-QA.QA_fetch_stocklist_day()
-
-QA.QA_fetch_stock_day_adv()
-
-QA.QA_fetch_stocklist_day_adv()
-
-
+# 股票
+QA_fetch_stock_day_adv(code,start,end)
+QA_fetch_stock_min_adv(code,start,end,type_='1min') # type_可以选1min/5min/15min/30min/60min 
+# 指数/ETF
+QA_fetch_index_day_adv(code,start,end)
+QA_fetch_index_min_adv(code,start,end,type_='1min') # type_可以选1min/5min/15min/30min/60min 
+# 板块
+QA_fetch_stock_block_adv(code)
 
 ```
 

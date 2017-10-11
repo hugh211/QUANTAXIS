@@ -1,3 +1,4 @@
+# coding=utf-8
 #
 # The MIT License (MIT)
 #
@@ -20,3 +21,29 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+
+""""
+这个模块主要致力维护一个简单易用的协程/异步IO框架
+短期内不会实装
+
+"""
+import asyncio
+from asyncio import AbstractEventLoopPolicy
+
+
+class QA_Event_loop():
+    def __init__(self, loop=None):
+        try:
+            self.loop = loop or asyncio.get_event_loop()
+            if self.loop.is_running():
+                raise NotImplementedError("Cannot use QA_Event_loop in "
+                                        "asynchroneous environment")
+        except:
+            self.loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self.loop)
+
+
+class QA_Event_future():
+    pass
+
