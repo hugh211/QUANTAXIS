@@ -81,11 +81,21 @@ def MIN(A, B):
     return var
 
 
+def CROSS(A, B):
+    if A[-2] < B[-2] and A[-1] > B[-1]:
+        return True
+    else:
+        return False
+
+
+def COUNT(COND, N):
+    var = np.where(COND, 1, 0)
+    return var[-N:].sum()
+
+
 def IF(COND, V1, V2):
     var = np.where(COND, V1, V2)
-    for i in range(len(var)):
-        V1[i] = var[i]
-    return V1
+    return pd.Series(var, index=V1.index)
 
 
 def REF(Series, N):
@@ -96,6 +106,11 @@ def REF(Series, N):
 
 def STD(Series, N):
     return pd.Series.rolling(Series, N).std()
+
+
+def AVEDEV(Series, N):
+    '平均绝对偏差 mean absolute deviation'
+    return pd.Series(Series).tail(N).mad()
 
 
 def MACD(Series, FAST, SLOW, MID):
@@ -121,8 +136,9 @@ def BBIBOLL(Series, N1, N2, N3, N4, N, M):  # 多空布林线
 
 def BBI(Series, N1, N2, N3, N4):
     '多空指标'
-    
-    bbi = (MA(Series, N1) + MA(Series, N2) + MA(Series, N3) + MA(Series, N4)) / 4
+
+    bbi = (MA(Series, N1) + MA(Series, N2) +
+           MA(Series, N3) + MA(Series, N4)) / 4
     DICT = {'BBI': bbi}
     VAR = pd.DataFrame(DICT)
     return VAR

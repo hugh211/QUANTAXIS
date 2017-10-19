@@ -12,12 +12,12 @@
 
 
 
-![version](https://img.shields.io/badge/Version-%200.5.3-orange.svg)
+![version](https://img.shields.io/badge/Version-%200.5.5-orange.svg)
 ![build](https://travis-ci.org/yutiansut/QUANTAXIS.svg?branch=master)
 [![Stories in Ready](https://badge.waffle.io/yutiansut/QUANTAXIS.svg?label=ready&title=Ready)](http://waffle.io/yutiansut/QUANTAXIS)
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/yutiansut/quantaxis)
 ![QAS](https://img.shields.io/badge/QAS-%200.0.8-brown.svg)
-![Pypi](https://img.shields.io/badge/Pypi-%200.5.3-blue.svg)
+![Pypi](https://img.shields.io/badge/Pypi-%200.5.5-blue.svg)
 ![python](https://img.shields.io/badge/python-%203.6/3.5/3.4/win/ubuntu-darkgrey.svg)
 ![Npm](https://img.shields.io/badge/Npm-%200.4.0-yellow.svg)
 ![author](https://img.shields.io/badge/Powered%20by-%20%20yutiansut-red.svg)
@@ -34,8 +34,8 @@ QUANTAXIS量化金融策略框架,是一个面向中小型策略团队的量化�
 
 - 日线（自1990年）回测 [定点复权] (T+1)
 - 分钟线 [1min/5min/15min/30min/60min]回测 (T+1)
-- 股指期货日线(T+0)
-- 股指期货分钟线 [1min/5min/15min/30min/60min] (T+0)
+- 股指期货日线(T+0)/指数日线/ETF日线
+- 股指期货分钟线(T+0) / 指数分钟线/ETF分钟线 [1min/5min/15min/30min/60min] 
 - 基于tushare/pytdx/各种爬虫的数据源
 - 实时交易数据
 - 基于Vue.js的前端网站
@@ -48,31 +48,33 @@ QUANTAXIS量化金融策略框架,是一个面向中小型策略团队的量化�
 - 文档更新
 - 基本面数据
 
+
 <!-- TOC -->
 
-- [QUANTAXIS 量化金融策略框架](#quantaxis-%E9%87%8F%E5%8C%96%E9%87%91%E8%9E%8D%E7%AD%96%E7%95%A5%E6%A1%86%E6%9E%B6)
-    - [框架结构](#%E6%A1%86%E6%9E%B6%E7%BB%93%E6%9E%84)
-    - [部署问题:](#%E9%83%A8%E7%BD%B2%E9%97%AE%E9%A2%98)
+- [QUANTAXIS 量化金融策略框架](#quantaxis-量化金融策略框架)
+    - [框架结构](#框架结构)
+    - [部署问题:](#部署问题)
         - [git](#git)
         - [MongoDB](#mongodb)
         - [Nodejs](#nodejs)
         - [python](#python)
-        - [安装QUANTAXIS](#%E5%AE%89%E8%A3%85quantaxis)
-        - [安装QUANATXIS_WebKit](#%E5%AE%89%E8%A3%85quanatxiswebkit)
-        - [启动QUANTAXIS CLI 并进行数据的初始化存储](#%E5%90%AF%E5%8A%A8quantaxis-cli-%E5%B9%B6%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AD%98%E5%82%A8)
-        - [启动QUANTAXIS_Webkit来查看回测的结果](#%E5%90%AF%E5%8A%A8quantaxiswebkit%E6%9D%A5%E6%9F%A5%E7%9C%8B%E5%9B%9E%E6%B5%8B%E7%9A%84%E7%BB%93%E6%9E%9C)
-        - [更新QUANTAXIS](#%E6%9B%B4%E6%96%B0quantaxis)
-    - [项目捐赠](#%E9%A1%B9%E7%9B%AE%E6%8D%90%E8%B5%A0)
-    - [关于QUANTAXIS基金](#%E5%85%B3%E4%BA%8Equantaxis%E5%9F%BA%E9%87%91)
-    - [一些基础的api介绍](#%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9A%84api%E4%BB%8B%E7%BB%8D)
-        - [QUANTAXIS.QABacktest 的 api](#quantaxisqabacktest-%E7%9A%84-api)
-        - [QUANTAXIS的核心数据结构](#quantaxis%E7%9A%84%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
-        - [QUANTAXIS的api](#quantaxis%E7%9A%84api)
-    - [回测Webkit插件概览](#%E5%9B%9E%E6%B5%8Bwebkit%E6%8F%92%E4%BB%B6%E6%A6%82%E8%A7%88)
-    - [QUANTAXIS 标准化协议和未来协议](#quantaxis-%E6%A0%87%E5%87%86%E5%8C%96%E5%8D%8F%E8%AE%AE%E5%92%8C%E6%9C%AA%E6%9D%A5%E5%8D%8F%E8%AE%AE)
+        - [安装QUANTAXIS](#安装quantaxis)
+        - [安装QUANATXIS_WebKit](#安装quanatxis_webkit)
+        - [启动QUANTAXIS CLI 并进行数据的初始化存储](#启动quantaxis-cli-并进行数据的初始化存储)
+        - [启动QUANTAXIS_Webkit来查看回测的结果](#启动quantaxis_webkit来查看回测的结果)
+        - [更新QUANTAXIS](#更新quantaxis)
+    - [项目捐赠](#项目捐赠)
+    - [关于QUANTAXIS基金](#关于quantaxis基金)
+    - [一些基础的api介绍](#一些基础的api介绍)
+        - [QUANTAXIS.QABacktest 的 api](#quantaxisqabacktest-的-api)
+        - [QUANTAXIS的核心数据结构](#quantaxis的核心数据结构)
+        - [QUANTAXIS的指标系统](#quantaxis的指标系统)
+        - [QUANTAXIS的行情分析/研究用](#quantaxis的行情分析研究用)
+        - [QUANTAXIS的api](#quantaxis的api)
+    - [回测Webkit插件概览](#回测webkit插件概览)
+    - [QUANTAXIS 标准化协议和未来协议](#quantaxis-标准化协议和未来协议)
 
 <!-- /TOC -->
-
 ## 框架结构
 ![](http://i1.piimg.com/567571/dc3c811a5afcb4fb.png)
 
@@ -187,7 +189,7 @@ sudo -H python3.6 get-pip.py
 sudo apt-get update
 sudo apt-get install python3.6-dev
 # 装talib前要先装numpy
-python3.6 -m pip install numpy -i https://pypi.doubanio.com/simple
+sudo python3.6 -m pip install numpy -i https://pypi.doubanio.com/simple
 wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
 tar -xzvf ta-lib-0.4.0-src.tar.gz
 cd ta-lib
@@ -195,10 +197,10 @@ cd ta-lib
 make
 sudo make install
 cd ..
-pip install TA-Lib
+sudo python3.6 -m pip install TA-Lib
 # 安装剩余的依赖项
-python3.6 -m pip install -r requirements.txt -i https://pypi.doubanio.com/simple
-python3.6 -m pip install tushare https://pypi.doubanio.com/simple
+sudo python3.6 -m pip install -r requirements.txt -i https://pypi.doubanio.com/simple
+sudo python3.6 -m pip install tushare
 
 ```
 > Windows
@@ -267,6 +269,12 @@ cd web
 (注明: admin注册是在python的QUANTAXIS save all时候执行的)
 
 另外 如果save all已经执行,依然登录不进去 点击插件状态 查看3000端口是否打开
+
+
+登录后点击左上角 <模拟回测> 在模拟回测的选择界面的用户名搜索框输入回测的时候的用户名(默认是admin),回车
+
+选择和你回测策略中名称一致的结果即可进入可视化界面
+
 
 ### 更新QUANTAXIS
 
@@ -413,7 +421,367 @@ QA_DataStruct_Stock_block
 
 
 
+
+
+我们可以通过 
+```
+import QUANTAXIS as QA
+
+# QA.QA_fetch_stock_day_adv
+# QA.QA_fetch_stock_min_adv
+# QA.QA_fetch_index_day_adv
+# QA.QA_fetch_index_min_adv
+
+```
+day线的参数是code, start, end
+min线的参数是code, start, end, type_='1min'
+
+其中 code 可以是一个股票,也可以是一列股票(list)
+
+取一个股票的数据
+```
+QA.QA_fetch_stock_day_adv('000001','2017-01-01','2017-10-01')
+In [5]: QA.QA_fetch_stock_day_adv('000001','2017-01-01','2017-10-01')
+Out[5]: QA_DataStruct_Stock_day with 1 securities
+```
+取多个股票的数据
+```
+QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-01-01','2017-10-01')
+In [6]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-01-01','2017-10-01')
+Out[6]: QA_DataStruct_Stock_day with 2 securities
+```
+显示结构体的数据 .data
+```
+In [10]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').data
+Out[10]:
+                     code   open   high    low  close    volume       date
+date       code
+2017-09-20 000001  000001  11.14  11.37  11.05  11.29  787154.0 2017-09-20
+2017-09-21 000001  000001  11.26  11.51  11.20  11.46  692407.0 2017-09-21
+2017-09-22 000001  000001  11.43  11.52  11.31  11.44  593927.0 2017-09-22
+2017-09-25 000001  000001  11.44  11.45  11.18  11.29  532391.0 2017-09-25
+2017-09-26 000001  000001  11.26  11.30  10.96  11.05  967460.0 2017-09-26
+2017-09-27 000001  000001  11.01  11.08  10.90  10.93  727188.0 2017-09-27
+2017-09-28 000001  000001  10.98  10.98  10.82  10.88  517220.0 2017-09-28
+2017-09-29 000001  000001  10.92  11.16  10.86  11.11  682280.0 2017-09-29
+2017-09-20 000002  000002  28.50  29.55  28.00  28.73  613095.0 2017-09-20
+2017-09-21 000002  000002  28.50  29.06  27.75  28.40  536324.0 2017-09-21
+2017-09-22 000002  000002  28.39  28.67  27.52  27.81  423093.0 2017-09-22
+2017-09-25 000002  000002  27.20  27.20  26.10  26.12  722702.0 2017-09-25
+2017-09-26 000002  000002  26.12  27.22  26.10  26.76  593044.0 2017-09-26
+2017-09-27 000002  000002  27.00  27.28  26.52  26.84  367534.0 2017-09-27
+2017-09-28 000002  000002  27.00  27.15  26.40  26.41  262347.0 2017-09-28
+2017-09-29 000002  000002  26.56  26.80  26.00  26.25  345752.0 2017-09-29
+```
+显示结构体的开/高/收/低 .open/.high/.close/.low
+```
+In [5]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').high
+Out[5]:
+date        code
+2017-09-20  000001    11.37
+2017-09-21  000001    11.51
+2017-09-22  000001    11.52
+2017-09-25  000001    11.45
+2017-09-26  000001    11.30
+2017-09-27  000001    11.08
+2017-09-28  000001    10.98
+2017-09-29  000001    11.16
+2017-09-20  000002    29.55
+2017-09-21  000002    29.06
+2017-09-22  000002    28.67
+2017-09-25  000002    27.20
+2017-09-26  000002    27.22
+2017-09-27  000002    27.28
+2017-09-28  000002    27.15
+2017-09-29  000002    26.80
+Name: high, dtype: float64
+```
+数据结构复权to_qfq()/to_hfq()
+
+返回的是一个DataStruct,用.data展示返回的数据的结构
+
+其中DataStruct.if_fq的属性会改变
+```
+In [4]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').to_qfq().data
+
+Out[4]:
+                     code   open   high    low  close    volume       date  \
+date       code
+2017-09-20 000001  000001  11.14  11.37  11.05  11.29  787154.0 2017-09-20
+2017-09-21 000001  000001  11.26  11.51  11.20  11.46  692407.0 2017-09-21
+2017-09-22 000001  000001  11.43  11.52  11.31  11.44  593927.0 2017-09-22
+2017-09-25 000001  000001  11.44  11.45  11.18  11.29  532391.0 2017-09-25
+2017-09-26 000001  000001  11.26  11.30  10.96  11.05  967460.0 2017-09-26
+2017-09-27 000001  000001  11.01  11.08  10.90  10.93  727188.0 2017-09-27
+2017-09-28 000001  000001  10.98  10.98  10.82  10.88  517220.0 2017-09-28
+2017-09-29 000001  000001  10.92  11.16  10.86  11.11  682280.0 2017-09-29
+2017-09-20 000002  000002  28.50  29.55  28.00  28.73  613095.0 2017-09-20
+2017-09-21 000002  000002  28.50  29.06  27.75  28.40  536324.0 2017-09-21
+2017-09-22 000002  000002  28.39  28.67  27.52  27.81  423093.0 2017-09-22
+2017-09-25 000002  000002  27.20  27.20  26.10  26.12  722702.0 2017-09-25
+2017-09-26 000002  000002  26.12  27.22  26.10  26.76  593044.0 2017-09-26
+2017-09-27 000002  000002  27.00  27.28  26.52  26.84  367534.0 2017-09-27
+2017-09-28 000002  000002  27.00  27.15  26.40  26.41  262347.0 2017-09-28
+2017-09-29 000002  000002  26.56  26.80  26.00  26.25  345752.0 2017-09-29
+
+                   preclose  adj
+date       code
+2017-09-20 000001       NaN  1.0
+2017-09-21 000001     11.29  1.0
+2017-09-22 000001     11.46  1.0
+2017-09-25 000001     11.44  1.0
+2017-09-26 000001     11.29  1.0
+2017-09-27 000001     11.05  1.0
+2017-09-28 000001     10.93  1.0
+2017-09-29 000001     10.88  1.0
+2017-09-20 000002       NaN  1.0
+2017-09-21 000002     28.73  1.0
+2017-09-22 000002     28.40  1.0
+2017-09-25 000002     27.81  1.0
+2017-09-26 000002     26.12  1.0
+2017-09-27 000002     26.76  1.0
+2017-09-28 000002     26.84  1.0
+2017-09-29 000002     26.41  1.0
+```
+数据透视 .pivot()
+```
+In [6]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').pivot('open')
+Out[6]:
+code        000001  000002
+date
+2017-09-20   11.14   28.50
+2017-09-21   11.26   28.50
+2017-09-22   11.43   28.39
+2017-09-25   11.44   27.20
+2017-09-26   11.26   26.12
+2017-09-27   11.01   27.00
+2017-09-28   10.98   27.00
+2017-09-29   10.92   26.56
+```
+数据的时间筛选.select_time(start,end)
+```
+In [10]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').select_time('2017-09-20','2017-09-25')
+Out[10]: QA_DataStruct_Stock_day with 2 securities
+
+In [11]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').select_time('2017-09-20','2017-09-25').data
+Out[11]:
+                     code   open   high    low  close    volume       date
+date       code
+2017-09-20 000001  000001  11.14  11.37  11.05  11.29  787154.0 2017-09-20
+2017-09-21 000001  000001  11.26  11.51  11.20  11.46  692407.0 2017-09-21
+2017-09-22 000001  000001  11.43  11.52  11.31  11.44  593927.0 2017-09-22
+2017-09-25 000001  000001  11.44  11.45  11.18  11.29  532391.0 2017-09-25
+2017-09-20 000002  000002  28.50  29.55  28.00  28.73  613095.0 2017-09-20
+2017-09-21 000002  000002  28.50  29.06  27.75  28.40  536324.0 2017-09-21
+2017-09-22 000002  000002  28.39  28.67  27.52  27.81  423093.0 2017-09-22
+2017-09-25 000002  000002  27.20  27.20  26.10  26.12  722702.0 2017-09-25
+```
+数据按时间往前/往后推 select_time_with_gap(time,gap,methods)
+
+time是你选择的时间
+gap是长度 (int)
+methods有 '<=','lte','<','lt','eq','==','>','gt','>=','gte'的选项
+```
+In [14]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').select_time_with_gap('2017-09-20',2,'gt')
+Out[14]: QA_DataStruct_Stock_day with 2 securities
+
+In [15]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').select_time_with_gap('2017-09-20',2,'gt').data
+Out[15]:
+                     code   open   high    low  close    volume       date
+date       code
+2017-09-21 000001  000001  11.26  11.51  11.20  11.46  692407.0 2017-09-21
+2017-09-22 000001  000001  11.43  11.52  11.31  11.44  593927.0 2017-09-22
+2017-09-21 000002  000002  28.50  29.06  27.75  28.40  536324.0 2017-09-21
+2017-09-22 000002  000002  28.39  28.67  27.52  27.81  423093.0 2017-09-22
+```
+选取结构组里面某一只股票select_code(code)
+
+```
+In [16]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').select_code('000001')
+Out[16]: QA_DataStruct_Stock_day with 1 securities
+In [17]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').select_code('000001').data
+Out[17]:
+                     code   open   high    low  close    volume       date
+date       code
+2017-09-20 000001  000001  11.14  11.37  11.05  11.29  787154.0 2017-09-20
+2017-09-21 000001  000001  11.26  11.51  11.20  11.46  692407.0 2017-09-21
+2017-09-22 000001  000001  11.43  11.52  11.31  11.44  593927.0 2017-09-22
+2017-09-25 000001  000001  11.44  11.45  11.18  11.29  532391.0 2017-09-25
+2017-09-26 000001  000001  11.26  11.30  10.96  11.05  967460.0 2017-09-26
+2017-09-27 000001  000001  11.01  11.08  10.90  10.93  727188.0 2017-09-27
+2017-09-28 000001  000001  10.98  10.98  10.82  10.88  517220.0 2017-09-28
+2017-09-29 000001  000001  10.92  11.16  10.86  11.11  682280.0 2017-09-29
+```
+取某一只股票的某一个时间的bar(code,time,if_trade)
+
+第三个选项 默认是True  
+第三选项的意义在于,如果出现了停牌,参数如果是True 那么就会返回空值 而如果是False,就会返回停牌前最后一个交易日的值
+```
+In [18]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').get_bar('000001','2017-09-20',True)
+Out[18]: QA_DataStruct_Stock_day with 1 securities
+
+In [19]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').get_bar('000001','2017-09-20',True).data
+Out[19]:
+                     code   open   high    low  close    volume       date
+date       code
+2017-09-20 000001  000001  11.14  11.37  11.05  11.29  787154.0 2017-09-20
+
+```
+画图 plot(code)
+
+如果是()空值 就会把全部的股票都画出来
+```
+In [20]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').plot()
+QUANTAXIS>> The Pic has been saved to your path: .\QA_stock_day_codepackage_bfq.html
+
+In [21]: QA.QA_fetch_stock_day_adv(['000001','000002'],'2017-09-20','2017-10-01').plot('000001')
+QUANTAXIS>> The Pic has been saved to your path: .\QA_stock_day_000001_bfq.html
+
+```
+
 ![](http://osnhakmay.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20171004125336.png)
+
+### QUANTAXIS的指标系统
+
+QUANTAXIS的核心数据结构有一个方法叫add_func(func,*args,**kwargs),作为一个指标入口,会返回一个和DataStruct中股票数量一致长度的list
+
+QUANTAXIS有两种类型的指标:
+
+- 基础指标(输入为Series的指标)
+- 应用级指标(可应用于DataStruct的指标)
+
+其中,基础指标是为了应用级指标做准备的,及对应于Series的分析和dataframe的分析的关系
+
+基础类指标 [基本和同花顺/通达信一致]
+```python
+import QUANTAXIS as QA
+QA.MA(Series, N)
+QA.EMA(Series, N)
+QA.DIFF(Series, N=1)
+QA.HHV(Series, N)
+QA.LLV(Series, N)
+QA.SUM(Series, N)
+QA.ABS(Series)
+QA.MAX(A, B)
+QA.MIN(A, B)
+QA.CROSS(A, B)
+QA.COUNT(COND, N)
+QA.IF(COND, V1, V2)
+QA.REF(Series, N)
+QA.STD(Series, N)
+QA.AVEDEV(Series, N)
+QA.BBIBOLL(Series, N1, N2, N3, N4, N, M)
+```
+应用级指标  add_func(func)
+```python
+import QUANTAXIS as QA
+QA.QA_indicator_OSC(DataFrame, N, M)
+QA.QA_indicator_BBI(DataFrame, N1, N2, N3, N4)
+QA.QA_indicator_PBX(DataFrame, N1, N2, N3, N4, N5, N6)
+QA.QA_indicator_BOLL(DataFrame, N)
+QA.QA_indicator_ROC(DataFrame, N, M)
+QA.QA_indicator_MTM(DataFrame, N, M)
+QA.QA_indicator_KDJ(DataFrame, N=9, M1=3, M2=3)
+QA.QA_indicator_MFI(DataFrame, N)
+QA.QA_indicator_ATR(DataFrame, N)
+QA.QA_indicator_SKDJ(DataFrame, N, M)
+QA.QA_indicator_WR(DataFrame, N, N1)
+QA.QA_indicator_BIAS(DataFrame, N1, N2, N3)
+QA.QA_indicator_RSI(DataFrame, N1, N2, N3)
+QA.QA_indicator_ADTM(DataFrame, N, M)
+QA.QA_indicator_DDI(DataFrame, N, N1, M, M1)
+QA.QA_indicator_CCI(DataFrame, N=14)
+```
+自己写一个指标:
+
+比如 绝路航标
+```python
+import QUANTAXIS as QA
+def JLHB(data, m=7, n=5):
+    """
+    通达信定义
+    VAR1:=(CLOSE-LLV(LOW,60))/(HHV(HIGH,60)-LLV(LOW,60))*80; 
+    B:SMA(VAR1,N,1); 
+    VAR2:SMA(B,M,1); 
+    绝路航标:IF(CROSS(B,VAR2) AND B<40,50,0);
+    """
+    var1 = (data['close'] - QA.LLV(data['low'], 60)) / \
+        (QA.HHV(data['high'], 60) - QA.LLV(data['low'], 60)) * 80
+    B = QA.MA(var1, m)
+    var2 = QA.MA(B, n)
+    if QA.CROSS(B,var2) and B[-1]<40:
+        return 1
+    else:
+        return 0
+
+# 得到指标
+QA.QA_fetch_stock_day_adv('000001','2017-01-01','2017-01-31').to_qfq().add_func(JLHB)
+```
+
+### QUANTAXIS的行情分析/研究用
+
+
+主要是针对行情的各种统计学特征/指标等分析,支持QA_DataStruct_系列的add_func()功能
+
+接收DataFrame形式的行情以及QUANTAXIS.QADATA格式的行情
+
+目前有:
+
+
+(属性)
+
+- 一阶差分
+- 样本方差
+- 方差
+- 标准差
+- 样本标准差
+- 平均数
+- 调和平均数
+- 众数
+- 振幅(极差)
+- 偏度
+- 峰度
+- 百分比变化
+- 平均绝对偏差 
+
+```python
+import QUANTAXIS as QA
+
+data=QA.QA_fetch_stock_day_adv('600066','2013-12-01','2017-10-01') #[可选to_qfq(),to_hfq()]
+s=QA.QA_Analysis_stock(data)
+# s 的属性是( < QA_Analysis_Stock > )
+
+s.open # 开盘价序列
+s.close # 收盘价序列
+s.high # 最高价序列
+s.low # 最低价序列
+s.vol  # 量
+s.volume # 同vol
+s.date  # 日期
+s.datetime
+s.index  # 索引
+s.price  # 平均价(O+H+L+C)/4
+s.mean # price的平均数
+s.max  # price的最大值
+s.min # price的最小值
+s.mad # price的平均绝对偏差
+s.mode  # price的众数(没啥用)
+s.price_diff # price的一阶差分
+s.variance # price的方差
+s.pvariance # price的样本方差
+s.stdev  # price的标准差
+s.pstdev # price的样本标准差
+s.mean_harmonic # price的调和平均数
+s.amplitude  #price的振幅[极差]
+s.skewnewss # price的峰度 (4阶中心距)
+s.kurtosis  # price的偏度 (3阶中心距)
+s.pct_change # price的百分比变化序列
+
+
+s.add_func(QA.QA_indicator_CCI) # 指标计算, 和DataStruct用法一致
+
+```
+
 ### QUANTAXIS的api
 ```python
 

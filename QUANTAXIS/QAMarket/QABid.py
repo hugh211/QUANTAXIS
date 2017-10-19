@@ -26,7 +26,6 @@ import datetime
 import random
 import threading
 import time
-
 import pandas as pd
 from QUANTAXIS.QAUtil import QA_util_log_info, QA_util_to_json_from_pandas
 """
@@ -55,6 +54,7 @@ class QA_QAMarket_bid():
         self.order_id = str(random.random())
         self.trade_id = ''
         self.status = '100'
+
 
     def stock_day(self):
         self.type = '0x01'

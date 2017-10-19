@@ -25,7 +25,8 @@ from functools import reduce
 
 import numpy as np
 import pandas as pd
-from QUANTAXIS.QAIndicator.base_func import *
+
+from QUANTAXIS.QAIndicator.QAIndicator_Series import *
 
 
 """
@@ -114,8 +115,16 @@ def QA_indicator_KDJ(DataFrame, N=9, M1=3, M2=3):
     return DICT
 
 
-def QA_indicator_MFI(DataFrame, N):
-    '资金指标'
+def QA_indicator_MFI(DataFrame, N=14):
+    """
+    资金指标
+    TYP := (HIGH + LOW + CLOSE)/3;
+    V1:=SUM(IF(TYP>REF(TYP,1),TYP*VOL,0),N)/SUM(IF(TYP<REF(TYP,1),TYP*VOL,0),N);
+    MFI:100-(100/(1+V1));
+    赋值: (最高价 + 最低价 + 收盘价)/3
+    V1赋值:如果TYP>1日前的TYP,返回TYP*成交量(手),否则返回0的N日累和/如果TYP<1日前的TYP,返回TYP*成交量(手),否则返回0的N日累和
+    输出资金流量指标:100-(100/(1+V1))
+    """
     C = DataFrame['close']
     H = DataFrame['high']
     L = DataFrame['low']
@@ -221,5 +230,36 @@ def QA_indicator_DDI(DataFrame, N, N1, M, M1):
     return DICT
 
 
-def QA_indicator_CCI(DataFrame, N):
-    pass
+def QA_indicator_CCI(DataFrame, N=14):
+    """
+    TYP:=(HIGH+LOW+CLOSE)/3;
+    CCI:(TYP-MA(TYP,N))/(0.015*AVEDEV(TYP,N));
+    返回一个值
+    """
+    typ = (DataFrame['high'] + DataFrame['low'] + DataFrame['close']) / 3
+    return ((typ - MA(typ, N)) / (0.015 * AVEDEV(typ, N))).tail(1)
+
+def QA_indicator_ASI(DataFrame,M1,M2):
+    """
+    LC=REF(CLOSE,1);
+    AA=ABS(HIGH-LC);
+    BB=ABS(LOW-LC);
+    CC=ABS(HIGH-REF(LOW,1));
+    DD=ABS(LC-REF(OPEN,1));
+    R=IF(AA>BB AND AA>CC,AA+BB/2+DD/4,IF(BB>CC AND BB>AA,BB+AA/2+DD/4,CC+DD/4));
+    X=(CLOSE-LC+(CLOSE-OPEN)/2+LC-REF(OPEN,1));
+    SI=16*X/R*MAX(AA,BB);
+    ASI:SUM(SI,M1);
+    ASIT:MA(ASI,M2);
+    """
+    CLOSE=DataFrame['close']
+    HIGH=DataFrame['high']
+    LOW=DataFrame['low']
+    OPEN=DataFrame['open']
+    LC=REF(CLOSE,1)
+    AA=ABS(HIGH-LC)
+    CC=ABS(HIGH-REF(LOW,1))
+    DD=ABS(LC-REF(OPEN,1))
+    
+    #R=IF(AA>BB AND AA>CC,AA+BB/2+DD/4,IF(BB>CC AND BB>AA,BB+AA/2+DD/4,CC+DD/4))
+    X=(CLOSE-LC+(CLOSE-OPEN)/2+LC-REF(OPEN,1))
