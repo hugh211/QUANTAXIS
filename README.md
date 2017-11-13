@@ -8,16 +8,16 @@
 [点击右上角Star和Watch来跟踪项目进展! 点击Fork来创建属于你的QUANTAXIS!]
 
 ![main_1](http://osnhakmay.bkt.clouddn.com/Main_1.gif)
-<img src="http://i1.piimg.com/1949/62c510db7915837a.png" width = "27.5%" />
+<img src="http://osnhakmay.bkt.clouddn.com/QUANTAXIS-white.png" width = "27.5%" />
 
 
 
-![version](https://img.shields.io/badge/Version-%200.5.6-orange.svg)
+![version](https://img.shields.io/badge/Version-%200.5.12-orange.svg)
 ![build](https://travis-ci.org/yutiansut/QUANTAXIS.svg?branch=master)
 [![Stories in Ready](https://badge.waffle.io/yutiansut/QUANTAXIS.svg?label=ready&title=Ready)](http://waffle.io/yutiansut/QUANTAXIS)
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/yutiansut/quantaxis)
 ![QAS](https://img.shields.io/badge/QAS-%200.0.8-brown.svg)
-![Pypi](https://img.shields.io/badge/Pypi-%200.5.6-blue.svg)
+![Pypi](https://img.shields.io/badge/Pypi-%200.5.12-blue.svg)
 ![python](https://img.shields.io/badge/python-%203.6/3.5/3.4/win/ubuntu-darkgrey.svg)
 ![Npm](https://img.shields.io/badge/Npm-%200.4.0-yellow.svg)
 ![author](https://img.shields.io/badge/Powered%20by-%20%20yutiansut-red.svg)
@@ -41,12 +41,15 @@ QUANTAXIS量化金融策略框架,是一个面向中小型策略团队的量化�
 - 基于Vue.js的前端网站
 - 自定义的数据结构
 - 指标计算
-- 板块数据(0.5.1新增)
+- 板块数据(0.5.1新增)/同花顺,通达信板块
 
 预计实现:
 
 - 文档更新
 - 基本面数据
+- 期货数据/回测
+- 实盘
+- 行情分发
 
 
 <!-- TOC -->
@@ -160,6 +163,11 @@ sudo npm install n -g
 sudo n latest
 sudo npm install npm -g #更新npm
 sudo npm install forever -g #安装一个全局的forever 用于之后启动
+(如果forever 安装卡住/耗时过长 使用淘宝镜像CNPM)
+
+(sudo npm install cnpm -g)
+(sudo cnpm install forever -g)
+
 ```
 
 linux/mac下的nodejs有一个版本管理包 叫n 需要全局安装 -g
@@ -214,7 +222,7 @@ sudo python3.6 -m pip install tushare<0.9
 git clone https://github.com/yutiansut/quantaxis
 cd quantaxis .
 pip install -r requirements.txt -i https://pypi.doubanio.com/simple
-pip install tushare<0.9
+pip install tushare==0.8.7
 (sudo) pip install -e . # 一定要用这种方法,python setup.py install方法无法解压 安装在本目录下的开发模式
 
 ```

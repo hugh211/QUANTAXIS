@@ -26,7 +26,7 @@ from QUANTAXIS.QAUtil import QA_util_log_info, QA_util_sql_mongo_setting
 
 
 class QA_Setting():
-    
+
     QA_util_sql_mongo_ip = '127.0.0.1'
     QA_util_sql_mongo_port = '27017'
     client = QA_util_sql_mongo_setting(
@@ -35,20 +35,22 @@ class QA_Setting():
     QA_setting_user_name = ''
     QA_setting_user_password = ''
     user = {'username': '', 'password': '', 'login': False}
-    
-    def QA_setting_init(self,ip='127.0.0.1',port=27017):
-        self.QA_util_sql_mongo_ip=ip
-        self.QA_util_sql_mongo_port=port
+
+    def QA_setting_init(self, ip='127.0.0.1', port=27017):
+        self.QA_util_sql_mongo_ip = ip
+        self.QA_util_sql_mongo_port = port
         self.client = QA_util_sql_mongo_setting(
             self.QA_util_sql_mongo_ip, self.QA_util_sql_mongo_port)
 
-        #return self
+        # return self
         self.user = self.QA_setting_login()
-    def set_ip(self,ip='127.0.0.1'):
-        self.QA_util_sql_mongo_ip=ip
+
+    def set_ip(self, ip='127.0.0.1'):
+        self.QA_util_sql_mongo_ip = ip
         self.client = QA_util_sql_mongo_setting(
             self.QA_util_sql_mongo_ip, self.QA_util_sql_mongo_port)
         return self
+
     def QA_setting_login(self):
         self.username = self.QA_setting_user_name
         self.password = self.QA_setting_user_password
@@ -62,3 +64,31 @@ class QA_Setting():
         else:
             QA_util_log_info('failed to login')
 
+
+info_ip_list = ['101.227.73.20',
+                '101.227.77.254',
+                '114.80.63.12',
+                '114.80.63.35',
+                '115.238.56.198',
+                '115.238.90.165',
+                '124.160.88.183',
+                '14.17.75.71',
+                '14.215.128.18',
+                '180.153.18.170',
+                '180.153.18.171',
+                '180.153.18.172',
+                '180.153.39.51',
+                '202.108.253.130',
+                '202.108.253.131',
+                '202.108.253.139',
+                '218.108.47.69',
+                '218.108.98.244',
+                '218.57.11.101',
+                '218.75.126.9',
+                '221.231.141.60',
+                '223.94.89.115',
+                '58.58.33.123',
+                '59.173.18.140',
+                '60.12.136.250',
+                '60.191.117.167',
+                '60.28.23.80']
