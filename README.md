@@ -12,12 +12,12 @@
 
 
 
-![version](https://img.shields.io/badge/Version-%200.5.12-orange.svg)
+![version](https://img.shields.io/badge/Version-%200.5.21-orange.svg)
 ![build](https://travis-ci.org/yutiansut/QUANTAXIS.svg?branch=master)
 [![Stories in Ready](https://badge.waffle.io/yutiansut/QUANTAXIS.svg?label=ready&title=Ready)](http://waffle.io/yutiansut/QUANTAXIS)
 [![StackShare](https://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/yutiansut/quantaxis)
 ![QAS](https://img.shields.io/badge/QAS-%200.0.8-brown.svg)
-![Pypi](https://img.shields.io/badge/Pypi-%200.5.12-blue.svg)
+![Pypi](https://img.shields.io/badge/Pypi-%200.5.21-blue.svg)
 ![python](https://img.shields.io/badge/python-%203.6/3.5/3.4/win/ubuntu-darkgrey.svg)
 ![Npm](https://img.shields.io/badge/Npm-%200.4.0-yellow.svg)
 ![author](https://img.shields.io/badge/Powered%20by-%20%20yutiansut-red.svg)
@@ -36,21 +36,32 @@ QUANTAXIS量化金融策略框架,是一个面向中小型策略团队的量化�
 - 分钟线 [1min/5min/15min/30min/60min]回测 (T+1)
 - 股指期货日线(T+0)/指数日线/ETF日线
 - 股指期货分钟线(T+0) / 指数分钟线/ETF分钟线 [1min/5min/15min/30min/60min] 
-- 基于tushare/pytdx/各种爬虫的数据源
+- 基于pytdx/各种爬虫的数据源 
+```
+[注意: tushare最新版本因为单方面直接复制了pytdx  所以导致和最新版本的pytdx不兼容 如有安装0.8.7版本以上的tushare 请降级使用]
+
+*** 降级时需注意: 直接pip uninstall tushare以后 还要去删掉tushare安装目录下的pytdx 再重新安装最新版本的pytdx ***
+
+```
 - 实时交易数据
 - 基于Vue.js的前端网站
 - 自定义的数据结构
 - 指标计算
 - 板块数据(0.5.1新增)/同花顺,通达信板块
+- 基本面数据(部分 最新一期财务报表)
+- 行情分发
+- 循环回测
+- 回测管理优化(新增回测主题/版本号)
+
 
 预计实现:
 
 - 文档更新
-- 基本面数据
 - 期货数据/回测
 - 实盘
-- 行情分发
+- 分析模块(行情分析/板块分析)
 
+- 成交记录分析器
 
 <!-- TOC -->
 
@@ -160,7 +171,7 @@ sudo service mongod start
 ```shell
 sudo apt-get install npm
 sudo npm install n -g
-sudo n latest
+sudo n stable
 sudo npm install npm -g #更新npm
 sudo npm install forever -g #安装一个全局的forever 用于之后启动
 (如果forever 安装卡住/耗时过长 使用淘宝镜像CNPM)
@@ -208,7 +219,7 @@ cd ..
 sudo python3.6 -m pip install TA-Lib
 # 安装剩余的依赖项
 sudo python3.6 -m pip install -r requirements.txt -i https://pypi.doubanio.com/simple
-sudo python3.6 -m pip install tushare<0.9
+sudo python3.6 -m pip install tushare==0.8.7 -i https://pypi.doubanio.com/simple
 
 ```
 > Windows
@@ -224,6 +235,15 @@ cd quantaxis .
 pip install -r requirements.txt -i https://pypi.doubanio.com/simple
 pip install tushare==0.8.7
 (sudo) pip install -e . # 一定要用这种方法,python setup.py install方法无法解压 安装在本目录下的开发模式
+# 注: 安装成本地开发模式以后,只需要git pull 就可以更新代码 无需重新 pip install -e .
+```
+
+```
+[注意: tushare最新版本因为单方面直接复制了pytdx  所以导致和最新版本的pytdx不兼容 如有安装0.8.7版本以上的tushare 请降级使用]
+
+典型表现是: 即使已经安装了pytdx 依然会报错找不到pytdx
+
+*** 降级时需注意: 直接pip uninstall tushare以后 还要去删掉tushare安装目录下(一般是lib\site-packages\)的pytdx 再重新安装最新版本的pytdx ***
 
 ```
 ### 安装QUANATXIS_WebKit
@@ -243,7 +263,8 @@ cd web
 
 在命令行输入 quantaxis 进去quantaxis CLI
 quantaxis> save all
-
+quantaxis> save stock_block
+quantaxis> save stock_info
 随意新建一个目录:(不要跟QUANTAXIS文件夹在一个目录)
 
 在命令行输入 quantaxis 进去quantaxis CLI

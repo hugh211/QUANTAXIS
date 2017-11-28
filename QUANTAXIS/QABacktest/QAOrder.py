@@ -23,35 +23,29 @@
 # SOFTWARE.
 
 
-class QUANTAXIS_Error():
-    QUANTAXIS_Error_framework_error = 0100
+from QUANTAXIS.QABacktest.QABacktest import QA_Backtest as QB
+from QUANTAXIS.QAMarket import QA_QAMarket_bid
+"""
 
-# QUANTAXIS 框架错误代码 0000-0999
-QUANTAXIS_error = {}
-# 数据获取/数据库读取错误代码 1000-1999
-QA_fetch_error = {}
-# 数据错误代码 保存部分 2000-2499
-QA_save_error = {}
 
-# 数据错误代码  更新部分 2500-2599
-QA_update_error = {}
-# 交易错误代码(模拟market返回) 3000-3999
-QA_market_error = {}
+暂时估摸着也还是用不起来 诶
+"""
 
-# 回测错误代码 4000-4999
-QA_backtest_error = {
-    # 通用错误代码
-    'total': {
+class QA_Order():
+    def __init__(self, *args, **kwargs):
+        self.order = QA_QAMarket_bid()
 
-    },
-    # 特定错误代码
-    'QA_backtest_stock_day': {
+    def load_order_strategy(self, strategy):
+        self.strategy = strategy
 
-    },
-    'QA_backtest_stock_min': {},
-    'QA_backtest_stock_tick': {},
-    'QA_backtest_future_day': {},
-    'QA_backtest_future_min': {},
-    'QA_backtest_future_tick': {}
+    def apply_order_strategy(self):
+        self.order.apply(self.strategy)
 
-}
+    def signal(towards=1):
+        pass
+
+
+
+
+if __name__=='__main__':
+    order=QA_Order()

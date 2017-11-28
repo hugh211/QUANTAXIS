@@ -31,7 +31,7 @@ by yutiansut
 
 2017/4/8
 """
-__version__ = '0.5.14'
+__version__ = '0.5.21'
 __author__ = 'yutiansut'
 logo = ' \n \
 ```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````` \n \
@@ -61,7 +61,8 @@ from QUANTAXIS.QAFetch import (QA_fetch_get_stock_day, QA_fetch_get_trade_date, 
 from QUANTAXIS.QAFetch.QAQuery import (QA_fetch_trade_date, QA_fetch_stock_day, QA_fetch_stocklist_day, QA_fetch_index_day,
                                        QA_fetch_stock_min, QA_fetch_stocklist_min, QA_fetch_future_min, QA_fetch_future_day,
                                        QA_fetch_future_tick, QA_fetch_stock_list, QA_fetch_stock_full, QA_fetch_stock_xdxr,
-                                       QA_fetch_backtest_info, QA_fetch_backtest_history, QA_fetch_stock_block)
+                                       QA_fetch_backtest_info, QA_fetch_backtest_history, QA_fetch_stock_block, QA_fetch_stock_info,
+                                       QA_fetch_stock_name)
 
 from QUANTAXIS.QAFetch.QAQuery_Advance import *
 
@@ -117,7 +118,7 @@ from QUANTAXIS.QAUtil import (QA_util_date_stamp, QA_util_time_stamp, QA_util_ms
                               QA_util_web_ping,
                               trade_date_sse, QA_util_if_trade,
                               QA_util_get_real_datelist, QA_util_get_real_date,
-                              QA_util_get_trade_range,
+                              QA_util_get_trade_range, QA_util_get_trade_gap,
                               QA_util_save_csv,
                               QA_util_multi_demension_list, QA_util_diff_list,
                               QA_util_to_json_from_pandas, QA_util_to_list_from_numpy, QA_util_to_list_from_pandas,
