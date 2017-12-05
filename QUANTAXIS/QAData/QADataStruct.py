@@ -505,8 +505,12 @@ class QA_DataStruct_Index_min(__stock_hq_base):
 
 class QA_DataStruct_Stock_min(__stock_hq_base):
     def __init__(self, DataFrame):
-        self.data = DataFrame.ix[:, [
-            'code', 'open', 'high', 'low', 'close', 'volume', 'datetime', 'date']]
+        try:
+            self.data = DataFrame.ix[:, [
+                'code', 'open', 'high', 'low', 'close', 'volume', 'preclose','datetime', 'date']]
+        except:
+            self.data = DataFrame.ix[:, [
+                'code', 'open', 'high', 'low', 'close', 'volume', 'datetime', 'date']]
         self.type = 'stock_min'
         self.if_fq = 'bfq'
         self.mongo_coll = QA_Setting.client.quantaxis.stock_min
@@ -835,6 +839,12 @@ class QA_DataStruct_Stock_transaction():
         self.order = DataFrame['order']
         self.index = DataFrame.index
         self.data = DataFrame
+
+    def __repr__(self):
+        return '< QA_DataStruct_Stock_Transaction >'
+
+    def __call__(self):
+        return self.data
 
     def resample(self, type_='1min'):
         return QA_DataStruct_Stock_min(QA_data_tick_resample(self.data, type_))

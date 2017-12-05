@@ -25,7 +25,7 @@
 import codecs
 import os
 import sys
-import QUANTAXIS
+
 try:
     from setuptools import setup
 except:
@@ -44,13 +44,12 @@ def read(fname):
     return codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-NAME = "quantaxis"
+NAME = "quantaxis_trade"
 """
 名字，一般放你包的名字即可
 """
-PACKAGES = ["QUANTAXIS", "QUANTAXIS.QAFetch", "QUANTAXIS.QACmd", "QUANTAXIS.QAMarket", 'QUANTAXIS.QAWeb',
-            "QUANTAXIS.QABacktest", "QUANTAXIS.QATask", "QUANTAXIS.QAData", 'QUANTAXIS.QAData.proto', "QUANTAXIS.QAAnalysis",
-            "QUANTAXIS.QASU", "QUANTAXIS.QAUtil", "QUANTAXIS.QAARP", "QUANTAXIS.QASignal", "QUANTAXIS.QAIndicator"]
+PACKAGES = ["QA_tradex", "QA_status_center",
+            "QA_shipane", "QA_Tdxtradeserver", 'util']
 """
 包含的包，可以多个，这是一个列表
 """
@@ -63,17 +62,17 @@ LONG_DESCRIPTION = read("README.rst")
 参见read方法说明
 """
 
-KEYWORDS = ["quantaxis", "quant", "finance", "Backtest", 'Framework']
+KEYWORDS = ["quantaxis", 'trade', "quant", "finance", "Backtest", 'Framework']
 """
 关于当前包的一些关键字，方便PyPI进行分类。
 """
 
-AUTHOR = QUANTAXIS.__author__
+AUTHOR = 'yutiansut'
 AUTHOR_EMAIL = "yutiansut@qq.com"
 
 URL = "http://www.yutiansut.com"
 
-VERSION = QUANTAXIS.__version__
+VERSION = '0.1.0'
 
 
 LICENSE = "MIT"
@@ -89,16 +88,11 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
     ],
-    install_requires=['pandas>=0.20.3', 'numpy>=1.12.0', 'tushare==0.8.7', 'flask_socketio>=2.9.0 ', 'motor>=1.1',
-                      'lxml>=4.0', ' beautifulsoup4', 'flask-socketio', 'flask', 'click>=6.7', 'matplotlib',
-                      'pymongo>=3.4', 'celery>=4.0.0', 'six>=1.10.0', 'tabulate>=0.7.7', 'pytdx>=1.57',
+    install_requires=['pytdx>=1.57', 'pandas>=0.20.3', 'numpy>=1.12.0', 'tushare==0.8.7', 'flask_socketio>=2.9.0 ', 'motor>=1.1',
+                      'lxml>=4.0', ' beautifulsoup4', 'flask-socketio', 'flask', 'click>=6.7',  'matplotlib',
+                      'pymongo>=3.4', 'celery>=4.0.0', 'six>=1.10.0', 'tabulate>=0.7.7', 'QUANTAXIS>=0.5.21',
                       'zenlog>=1.1', 'delegator.py>=0.0.12', 'flask>=0.12.2', 'pyecharts>=0.2.4', 'protobuf>=3.4.0'],
     entry_points={
-        'console_scripts': [
-            'quantaxis=QUANTAXIS.QACmd:QA_cmd',
-            'quantaxisd=QUANTAXIS.QAWeb.QA_Web:main',
-            'quantaxisq=QUANTAXIS.QAFetch.QATdx_adv:bat'
-        ]
     },
     # install_requires=requirements,
     keywords=KEYWORDS,

@@ -31,7 +31,7 @@ import pandas as pd
 from bson.objectid import ObjectId
 from pandas import DataFrame
 from QUANTAXIS.QAUtil import (QA_Setting, QA_util_date_stamp, trade_date_sse,
-                              QA_util_date_valid, QA_util_log_info,
+                              QA_util_date_valid, QA_util_log_info, QA_util_sql_mongo_sort_ASCENDING, QA_util_sql_mongo_sort_DESCENDING,
                               QA_util_time_stamp, QA_util_to_json_from_pandas, QA_util_to_list_from_pandas)
 from QUANTAXIS.QAData import QA_data_make_hfq, QA_data_make_qfq
 """
@@ -314,3 +314,28 @@ def QA_fetch_stock_name(code, collections=QA_Setting.client.quantaxis.stock_list
         return collections.find_one({'code': code})['name']
     except Exception as e:
         QA_util_log_info(e)
+
+
+def QA_fetch_quotation(code, db=QA_Setting.client.quantaxis):
+    try:
+        collections = db.get_collection(
+            'realtime_{}'.format(datetime.date.today()))
+        return collections.find({'code': code}).sort('datetime', QA_util_sql_mongo_sort_DESCENDING)[0]
+    except Exception as e:
+        raise e
+
+def QA_fetch_quotations(time=None, db=QA_Setting.client.quantaxis):
+    
+    try:
+        collections = db.get_collection(
+            'realtime_{}'.format(datetime.date.today()))
+        times=collections.find({'code': '000001'}).sort('datetime', QA_util_sql_mongo_sort_DESCENDING)[0]['datetime']
+        
+        return pd.DataFrame([item for item in collections.find({'datetime':times})]).drop(['_id'], axis=1)
+    except Exception as e:
+        raise e
+
+
+
+if __name__ == '__main__':
+    print(QA_fetch_quotations())
