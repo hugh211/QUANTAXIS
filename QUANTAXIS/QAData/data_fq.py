@@ -23,11 +23,12 @@
 # SOFTWARE.
 
 
+import datetime
+
+import pandas as pd
+
 from QUANTAXIS.QAFetch import QA_fetch_get_stock_day, QA_fetch_get_stock_xdxr
 from QUANTAXIS.QAUtil import QA_Setting, QA_util_log_info
-
-import datetime
-import pandas as pd
 
 
 def QA_data_get_qfq(code, start, end):
@@ -68,7 +69,7 @@ def QA_data_make_qfq(bfq_data, xdxr_data):
     data['preclose'] = data['preclose'] * data['adj']
 
     return data.query('if_trade==1').drop(['fenhong', 'peigu', 'peigujia', 'songzhuangu',
-                                           'if_trade', 'category'], axis=1)[data['open'] != 0]
+                                           'if_trade', 'category'], axis=1).query("open != 0")
 
 
 def QA_data_make_hfq(bfq_data, xdxr_data):
@@ -94,7 +95,7 @@ def QA_data_make_hfq(bfq_data, xdxr_data):
     data['low'] = data['low'] / data['adj']
     data['close'] = data['close'] / data['adj']
     data['preclose'] = data['preclose'] / data['adj']
-    return data.query('if_trade==1').drop(['fenhong', 'peigu', 'peigujia', 'songzhuangu'], axis=1)[data['open'] != 0]
+    return data.query('if_trade==1').drop(['fenhong', 'peigu', 'peigujia', 'songzhuangu'], axis=1).query("open != 0")
 
 
 def QA_data_stock_to_fq(__data, type_='01'):
