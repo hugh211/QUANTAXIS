@@ -1,4 +1,4 @@
-# encoding: UTF-8
+#coding :utf-8
 #
 # The MIT License (MIT)
 #
@@ -22,13 +22,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import datetime
+from QUANTAXIS import (QA_SU_save_etf_day, QA_SU_save_index_day,
+                       QA_SU_save_stock_block, QA_SU_save_stock_day,
+                       QA_SU_save_stock_list, QA_SU_save_stock_xdxr,
+                       QA_util_log_info)
 
+QA_util_log_info('SAVE/UPDATE {}'.format(datetime.datetime.now()))
 
-import sys
-import os
-import argparse
-
-
-# 一个直接通过命令行运行的指令
-# 用于docker
-
+QA_SU_save_stock_day('tdx')
+QA_SU_save_stock_xdxr('tdx')
+QA_SU_save_etf_day('tdx')
+QA_SU_save_index_day('tdx')
+QA_SU_save_stock_list('tdx')
+QA_SU_save_stock_block('tdx')
